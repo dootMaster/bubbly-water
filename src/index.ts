@@ -31,8 +31,8 @@ const runner = Runner.create()
 Runner.run(runner, engine)
 World.add(world, [pointA, pointB, line])
 createNonOverlappingHoles()
-let goalId = randomGoal(engine)
 World.add(engine.world, [...holes, THE_BALL])
+let goalId = randomGoal(engine)
 
 Events.on(engine, 'collisionStart', (event) => {
   event.pairs.forEach((pair) => {
@@ -43,7 +43,7 @@ Events.on(engine, 'collisionStart', (event) => {
     ) {
       console.log('Goal reached!')
       RESET()
-      randomGoal(engine)
+      goalId = randomGoal(engine)
     }
 
     // if (pair.bodyA === compositeBall && pair.bodyB === deathHole) {

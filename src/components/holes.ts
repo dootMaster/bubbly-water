@@ -78,21 +78,39 @@ function generateGoal(x: number, y: number): Body {
 }
 
 export function randomGoal(engine: Engine): number {
-  const randomHole = holes[randomSeededIndexes[currentGoal]]
-  const goal = generateGoal(randomHole.position.x, randomHole.position.y)
+  let randomHole = holes[randomSeededIndexes[currentGoal]]
+  let newGoal = generateGoal(randomHole.position.x, randomHole.position.y)
+
   if (!holeder) {
+    // First-time setup
     holeder = randomHole
-    goalder = goal
+    goalder = newGoal
+
+    // Replace the random hole with the goal
     World.remove(engine.world, randomHole)
-    World.add(engine.world, goal)
+    World.add(engine.world, newGoal)
   } else {
-    World.remove(engine.world, goal)
+    // Swap back the previous goal to a hole
+    if (goalder) {
+      World.remove(engine.world, goalder)
+    }
     World.add(engine.world, holeder)
 
+    // Increment current goal and replace with new goal
     currentGoal++
-    World.remove(engine.world, randomHole)
-    World.add(engine.world, goal)
+    holeder = randomHole
+    goalder = newGoal
+
+    // Replace new hole with goal
+    const nextRandomHole = holes[randomSeededIndexes[currentGoal]]
+    const nextGoal = generateGoal(
+      nextRandomHole.position.x,
+      nextRandomHole.position.y
+    )
+    World.remove(engine.world, nextRandomHole)
+    World.add(engine.world, nextGoal)
   }
-  console.log(currentGoal)
-  return goal.id
+
+  // Return the ID of the new goal
+  return newGoal.id
 }
