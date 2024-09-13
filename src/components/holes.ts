@@ -1,4 +1,4 @@
-import { Body, Bodies } from 'matter-js'
+import { Body, Bodies, World, Engine } from 'matter-js'
 const seedrandom = require('seedrandom')
 import { BALL_LAYER, GOAL_LAYER, DEATH_LAYER } from './collisionMasks'
 
@@ -12,20 +12,6 @@ export const holes: Body[] = []
 const ballRadius = 800 / 32
 const holeRadius = ballRadius + 5 // Slightly larger than the ball
 const numberOfHoles = 60 // Number of holes
-
-export const goalHole = Bodies.circle(screenWidth / 2, 50, holeRadius, {
-  isStatic: true,
-  isSensor: true,
-  render: {
-    fillStyle: '#32CD32',
-  },
-  collisionFilter: {
-    category: GOAL_LAYER,
-    mask: BALL_LAYER,
-  },
-})
-
-holes.push(goalHole)
 
 function isOverlapping(x: number, y: number): boolean {
   for (const hole of holes) {
@@ -65,4 +51,48 @@ export function createNonOverlappingHoles() {
     }
     attempts++
   }
+}
+
+let holeder: Body | null = null
+let goalder: Body | null = null
+const randomSeededIndexes: number[] = []
+const totalGoals = 10
+export let currentGoal = 0
+
+for (let i = 0; i < totalGoals; i++) {
+  randomSeededIndexes.push(Math.floor(rng() * holes.length))
+}
+
+function generateGoal(x: number, y: number): Body {
+  return Bodies.circle(x, y, holeRadius, {
+    isStatic: true,
+    isSensor: true,
+    render: {
+      fillStyle: '#32CD32',
+    },
+    collisionFilter: {
+      category: GOAL_LAYER,
+      mask: BALL_LAYER,
+    },
+  })
+}
+
+export function randomGoal(engine: Engine): number {
+  const randomHole = holes[randomSeededIndexes[currentGoal]]
+  const goal = generateGoal(randomHole.position.x, randomHole.position.y)
+  if (!holeder) {
+    holeder = randomHole
+    goalder = goal
+    World.remove(engine.world, randomHole)
+    World.add(engine.world, goal)
+  } else {
+    World.remove(engine.world, goal)
+    World.add(engine.world, holeder)
+
+    currentGoal++
+    World.remove(engine.world, randomHole)
+    World.add(engine.world, goal)
+  }
+  console.log(currentGoal)
+  return goal.id
 }
