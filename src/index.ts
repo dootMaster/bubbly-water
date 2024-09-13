@@ -1,7 +1,7 @@
 import { Engine, Render, Runner, World, Events } from 'matter-js'
 import { pointA, pointB, line, updateLine } from './components/bar'
 import { updateMovement } from './components/controls'
-import { THE_BALL } from './components/ball'
+import { THE_BALL, ballCollisionBody } from './components/ball'
 import { createNonOverlappingHoles, goalHole, holes } from './components/holes'
 
 const engine = Engine.create()
@@ -28,14 +28,13 @@ Runner.run(runner, engine)
 World.add(world, [pointA, pointB, line])
 createNonOverlappingHoles()
 World.add(engine.world, [...holes, goalHole, THE_BALL])
-console.log(THE_BALL, goalHole)
 
 Events.on(engine, 'collisionStart', (event) => {
   event.pairs.forEach((pair) => {
-    // console.log('Collision pair:', pair.bodyA.label, pair.bodyB.label)
+    // console.log('Collision pair:', pair.bodyA, pair.bodyB)
     if (
-      (pair.bodyA === THE_BALL && pair.bodyB === goalHole) ||
-      (pair.bodyA === goalHole && pair.bodyB === THE_BALL)
+      (pair.bodyA === ballCollisionBody && pair.bodyB === goalHole) ||
+      (pair.bodyA === goalHole && pair.bodyB === ballCollisionBody)
     ) {
       console.log('Goal reached!')
       RESET() // Call your reset function or handle the goal logic
@@ -49,6 +48,7 @@ Events.on(engine, 'collisionStart', (event) => {
 })
 
 function RESET() {
+  console.log('reset')
   World.remove(world, [pointA, pointB, line, THE_BALL])
   World.add(world, [pointA, pointB, line, THE_BALL])
 }

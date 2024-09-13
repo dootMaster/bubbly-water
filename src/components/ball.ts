@@ -16,7 +16,7 @@ const ball = Bodies.circle(screenWidth / 2, screenHeight - 60, ballRadius, {
   },
 })
 
-const ballCollisionBody = Bodies.circle(
+export const ballCollisionBody = Bodies.circle(
   screenWidth / 2,
   screenHeight - 60,
   ballRadius * 0.2,
