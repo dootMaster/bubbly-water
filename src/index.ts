@@ -49,8 +49,6 @@ Events.on(engine, 'collisionStart', (event) => {
 
 function RESET() {
   console.log('reset')
-  World.remove(world, [pointA, pointB, line, THE_BALL])
-  World.add(world, [pointA, pointB, line, THE_BALL])
 }
 
 function gameLoop(): void {

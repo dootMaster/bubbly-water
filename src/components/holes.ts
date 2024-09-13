@@ -1,5 +1,9 @@
 import { Body, Bodies } from 'matter-js'
+const seedrandom = require('seedrandom')
 import { BALL_LAYER, GOAL_LAYER, DEATH_LAYER } from './collisionMasks'
+
+const SEED = 'keep making things'
+const rng = seedrandom(SEED)
 
 const screenHeight = 1000
 const screenWidth = 800
@@ -7,7 +11,7 @@ const screenWidth = 800
 export const holes: Body[] = []
 const ballRadius = 800 / 32
 const holeRadius = ballRadius + 5 // Slightly larger than the ball
-const numberOfHoles = 50 // Number of holes
+const numberOfHoles = 60 // Number of holes
 
 export const goalHole = Bodies.circle(screenWidth / 2, 50, holeRadius, {
   isStatic: true,
@@ -32,7 +36,7 @@ function isOverlapping(x: number, y: number): boolean {
     const radius = hole.circleRadius || 0 // Access the radius safely
 
     // If the distance between centers is less than the sum of the radii, they overlap
-    if (distance < radius * 2.2) {
+    if (distance < radius * 2.1) {
       return true
     }
   }
@@ -43,9 +47,8 @@ export function createNonOverlappingHoles() {
   let attempts = 0
   while (holes.length < numberOfHoles && attempts < 1000) {
     // Limit attempts to prevent infinite loops
-    const x = Math.random() * (screenWidth - 2 * holeRadius) + holeRadius
-    const y =
-      Math.random() * (screenHeight - 200 - 2 * holeRadius) + holeRadius + 80 // Avoid top and bottom
+    const x = rng() * (screenWidth - 2 * holeRadius) + holeRadius
+    const y = rng() * (screenHeight - 200 - 2 * holeRadius) + holeRadius + 80 // Avoid top and bottom
 
     // Check if the new hole overlaps with any existing holes
     if (!isOverlapping(x, y)) {

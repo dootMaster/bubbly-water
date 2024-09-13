@@ -7,12 +7,12 @@ const screenWidth = 800
 const ballRadius = 800 / 32
 
 const ball = Bodies.circle(screenWidth / 2, screenHeight - 60, ballRadius, {
-  density: 15, // Higher density for a heavier feel
-  restitution: 0, // Bounciness
-  friction: 0.3, // Slight friction for a more realistic feel
-  mass: 1000,
+  // density: 0.015,
+  restitution: 0.05,
+  friction: 0.05,
+  // mass: Math.PI * Math.pow(ballRadius, 2) * 0.015,
   render: {
-    fillStyle: '#FF6F61',
+    fillStyle: '#FF6F61', // Color of the ball
   },
 })
 

@@ -25,7 +25,7 @@ export function handleKeyUp(event: KeyboardEvent): void {
 }
 
 export function updateMovement(): void {
-  const moveSpeed = 0.6
+  const moveSpeed = 0.8
 
   if (keyState['r'] && pointA.position.y - moveSpeed > screenTop) {
     Body.translate(pointA, { x: 0, y: -moveSpeed }) // Move point A up
