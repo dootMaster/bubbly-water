@@ -20,7 +20,7 @@ module.exports = {
   },
   devtool: 'inline-source-map', // Useful for debugging
   devServer: {
-    static: path.join(__dirname, 'dist'), // Serve static files from the 'dist' directory
+    static: path.join(__dirname, 'docs'), // Serve static files from the 'dist' directory
     hot: true, // Enable hot module replacement
     open: true, // Open the browser after server had been started
     port: 9000, // Port to listen on
