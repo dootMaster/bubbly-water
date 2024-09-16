@@ -50,8 +50,8 @@ Events.on(engine, 'collisionStart', (event) => {
     ) {
       playerScore++
       updateScoreDisplay()
-      RESET()
       goalId = randomGoal(engine)
+      RESET()
     }
     if (deathHoleCollisionCheck(pair)) {
       playerLives--
@@ -84,7 +84,10 @@ function RESET() {
   resetHelper(pointA, 0, screenHeight - 50)
   resetHelper(pointB, screenWidth, screenHeight - 50)
   updateLine(engine)
-  resetHelper(THE_BALL, screenWidth / 2, screenHeight - 60)
+  // resetHelper(THE_BALL, screenWidth / 2, screenHeight - 60)
+  World.remove(engine.world, THE_BALL)
+  World.add(engine.world, THE_BALL)
+  Body.setPosition(THE_BALL, { x: screenWidth / 2, y: screenHeight - 60 })
 }
 
 let playerLives = 3

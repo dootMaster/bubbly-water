@@ -7,7 +7,7 @@ const screenWidth = 800
 const ballRadius = 800 / 32
 
 const ball = Bodies.circle(screenWidth / 2, screenHeight - 60, ballRadius, {
-  density: 0.3,
+  density: 0.8,
   friction: 0.05,
   mass: 300,
   render: {

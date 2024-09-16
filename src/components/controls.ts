@@ -4,7 +4,7 @@ import { pointA, pointB } from './bar'
 const screenTop = 0
 const screenHeight = 1000
 const screenBottom = screenHeight
-const moveSpeed = 1
+const moveSpeed = 0.8
 
 const keyState: Record<string, boolean> = {
   r: false,

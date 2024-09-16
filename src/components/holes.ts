@@ -11,7 +11,7 @@ const screenWidth = 800
 export const holes: Body[] = []
 const ballRadius = 800 / 32
 const holeRadius = ballRadius + 5 // Slightly larger than the ball
-const numberOfHoles = 60 // Number of holes
+const numberOfHoles = 50 // Number of holes
 
 function isOverlapping(x: number, y: number): boolean {
   for (const hole of holes) {
