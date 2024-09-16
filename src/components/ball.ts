@@ -9,8 +9,8 @@ const ballRadius = 800 / 32
 const ball = Bodies.circle(screenWidth / 2, screenHeight - 60, ballRadius, {
   density: 0.3,
   restitution: 0.05,
-  friction: 0.05,
-  mass: 300,
+  // friction: 0.05,
+  // mass: 300,
   render: {
     fillStyle: '#FF6F61', // Color of the ball
   },

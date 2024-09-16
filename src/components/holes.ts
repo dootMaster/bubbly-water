@@ -3,7 +3,7 @@ const seedrandom = require('seedrandom')
 import { BALL_LAYER, GOAL_LAYER, DEATH_LAYER } from './collisionMasks'
 
 const SEED = 'keep making things'
-const rng = seedrandom(SEED)
+export const rng = seedrandom(SEED)
 
 const screenHeight = 1000
 const screenWidth = 800
@@ -29,6 +29,8 @@ function isOverlapping(x: number, y: number): boolean {
   return false
 }
 
+export const deathHoleIds = new Set()
+
 export function createNonOverlappingHoles() {
   let attempts = 0
   while (holes.length < numberOfHoles && attempts < 1000) {
@@ -48,6 +50,7 @@ export function createNonOverlappingHoles() {
         render: { fillStyle: '#000' },
       })
       holes.push(hole as Body)
+      deathHoleIds.add(hole.id)
     }
     attempts++
   }
@@ -55,12 +58,20 @@ export function createNonOverlappingHoles() {
 
 let holeder: Body | null = null
 let goalder: Body | null = null
-const randomSeededIndexes: number[] = []
+export const randomSeededIndexes: number[] = []
 const totalGoals = 10
 export let currentGoal = 0
 
-for (let i = 0; i < totalGoals; i++) {
-  randomSeededIndexes.push(Math.floor(rng() * holes.length))
+export function generateRandomGoalIndexes(array: number[]) {
+  const set = new Set()
+  while (array.length < totalGoals) {
+    const randomIndex = Math.floor(rng() * holes.length)
+    const hasIndex = set.has(randomIndex)
+    if (!hasIndex) {
+      array.push(randomIndex)
+      set.add(randomIndex)
+    }
+  }
 }
 
 function generateGoal(x: number, y: number): Body {
@@ -78,39 +89,30 @@ function generateGoal(x: number, y: number): Body {
 }
 
 export function randomGoal(engine: Engine): number {
-  let randomHole = holes[randomSeededIndexes[currentGoal]]
-  let newGoal = generateGoal(randomHole.position.x, randomHole.position.y)
+  const randomHole = holes[randomSeededIndexes[currentGoal]]
+  const newGoal = generateGoal(randomHole.position.x, randomHole.position.y)
 
-  if (!holeder) {
-    // First-time setup
-    holeder = randomHole
-    goalder = newGoal
-
-    // Replace the random hole with the goal
-    World.remove(engine.world, randomHole)
-    World.add(engine.world, newGoal)
-  } else {
-    // Swap back the previous goal to a hole
-    if (goalder) {
-      World.remove(engine.world, goalder)
-    }
+  // Swap back the previous goal to a hole
+  if (goalder && holeder) {
+    World.remove(engine.world, goalder)
     World.add(engine.world, holeder)
+  }
 
-    // Increment current goal and replace with new goal
+  // save refs to the new things
+  holeder = randomHole
+  goalder = newGoal
+
+  World.remove(engine.world, randomHole)
+  World.add(engine.world, newGoal)
+
+  if (currentGoal < 10) {
     currentGoal++
-    holeder = randomHole
-    goalder = newGoal
-
-    // Replace new hole with goal
-    const nextRandomHole = holes[randomSeededIndexes[currentGoal]]
-    const nextGoal = generateGoal(
-      nextRandomHole.position.x,
-      nextRandomHole.position.y
-    )
-    World.remove(engine.world, nextRandomHole)
-    World.add(engine.world, nextGoal)
   }
 
   // Return the ID of the new goal
   return newGoal.id
+}
+
+export function resetGoalSequence() {
+  currentGoal = 0
 }

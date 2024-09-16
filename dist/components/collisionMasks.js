@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.BAR_LAYER = exports.DEATH_LAYER = exports.GOAL_LAYER = exports.BALL_LAYER = void 0;
+const BALL_LAYER = 0x0001;
+exports.BALL_LAYER = BALL_LAYER;
+const GOAL_LAYER = 0x0002;
+exports.GOAL_LAYER = GOAL_LAYER;
+const DEATH_LAYER = 0x0003;
+exports.DEATH_LAYER = DEATH_LAYER;
+const BAR_LAYER = 0x0004;
+exports.BAR_LAYER = BAR_LAYER;
