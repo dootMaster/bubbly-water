@@ -8,11 +8,10 @@ const ballRadius = 800 / 32
 
 const ball = Bodies.circle(screenWidth / 2, screenHeight - 60, ballRadius, {
   density: 0.3,
-  restitution: 0.05,
-  // friction: 0.05,
-  // mass: 300,
+  friction: 0.05,
+  mass: 300,
   render: {
-    fillStyle: '#FF6F61', // Color of the ball
+    fillStyle: '#FF6F61',
   },
 })
 
@@ -21,9 +20,9 @@ export const ballCollisionBody = Bodies.circle(
   screenHeight - 60,
   ballRadius * 0.2,
   {
-    isSensor: true, // This smaller body won't cause physical collisions
+    isSensor: true,
     render: {
-      visible: true, // Hidden smaller collision body
+      visible: true,
       fillStyle: '#ffffff',
     },
     collisionFilter: {
@@ -34,5 +33,5 @@ export const ballCollisionBody = Bodies.circle(
 )
 
 export const THE_BALL = Body.create({
-  parts: [ball, ballCollisionBody], // Attach both the visual and collision bodies
+  parts: [ball, ballCollisionBody],
 })

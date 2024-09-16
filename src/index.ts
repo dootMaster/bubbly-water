@@ -9,7 +9,6 @@ import {
   randomGoal,
   randomSeededIndexes,
   deathHoleIds,
-  currentGoal,
   resetGoalSequence,
 } from './components/holes'
 import { debouncedLog } from './components/utils/debouncedLog'

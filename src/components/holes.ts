@@ -1,6 +1,6 @@
 import { Body, Bodies, World, Engine } from 'matter-js'
 const seedrandom = require('seedrandom')
-import { BALL_LAYER, GOAL_LAYER, DEATH_LAYER } from './collisionMasks'
+import { BALL_LAYER, GOAL_LAYER } from './collisionMasks'
 
 const SEED = 'keep making things'
 export const rng = seedrandom(SEED)
@@ -34,17 +34,11 @@ export const deathHoleIds = new Set()
 export function createNonOverlappingHoles() {
   let attempts = 0
   while (holes.length < numberOfHoles && attempts < 1000) {
-    // Limit attempts to prevent infinite loops
     const x = rng() * (screenWidth - 2 * holeRadius) + holeRadius
     const y = rng() * (screenHeight - 200 - 2 * holeRadius) + holeRadius + 80 // Avoid top and bottom
 
-    // Check if the new hole overlaps with any existing holes
     if (!isOverlapping(x, y)) {
       const hole = Bodies.circle(x, y, holeRadius, {
-        collisionFilter: {
-          category: DEATH_LAYER,
-          mask: BALL_LAYER,
-        },
         isStatic: true,
         isSensor: true,
         render: { fillStyle: '#000' },
@@ -92,13 +86,11 @@ export function randomGoal(engine: Engine): number {
   const randomHole = holes[randomSeededIndexes[currentGoal]]
   const newGoal = generateGoal(randomHole.position.x, randomHole.position.y)
 
-  // Swap back the previous goal to a hole
   if (goalder && holeder) {
     World.remove(engine.world, goalder)
     World.add(engine.world, holeder)
   }
 
-  // save refs to the new things
   holeder = randomHole
   goalder = newGoal
 
@@ -109,7 +101,6 @@ export function randomGoal(engine: Engine): number {
     currentGoal++
   }
 
-  // Return the ID of the new goal
   return newGoal.id
 }
 

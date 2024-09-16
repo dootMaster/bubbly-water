@@ -4,6 +4,7 @@ import { pointA, pointB } from './bar'
 const screenTop = 0
 const screenHeight = 1000
 const screenBottom = screenHeight
+const moveSpeed = 1
 
 const keyState: Record<string, boolean> = {
   r: false,
@@ -25,8 +26,6 @@ export function handleKeyUp(event: KeyboardEvent): void {
 }
 
 export function updateMovement(): void {
-  const moveSpeed = 1.2
-
   if (keyState['r'] && pointA.position.y - moveSpeed > screenTop) {
     Body.translate(pointA, { x: 0, y: -moveSpeed }) // Move point A up
   }
